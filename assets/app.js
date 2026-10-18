@@ -53,7 +53,7 @@ const svcById = (id) => SERVICES.find(s => s.id === id) || SERVICES[0];
 /* ---------------- tweak state ---------------- */
 const TWEAKS = {
   look:'crisp',
-  headline:'Melbourne Wash & Fold',
+  headline:'Richmond Laundromat',
   hero:'compact',
   columns:3,
   cards:'photo',

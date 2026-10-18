@@ -1,6 +1,6 @@
-# Melbourne Wash & Fold — Website
+# Richmond Laundromat — Website
 
-**Live site:** https://melbourne-wash-fold.vercel.app
+**Live site:** https://richmond-laundromat.vercel.app
 
 ---
 
@@ -10,7 +10,7 @@
 |---|---|
 | Website code | This GitHub repository |
 | Hosting | Vercel (free tier — no monthly cost) |
-| Domain | melbourne-wash-fold.vercel.app (custom domain can be added) |
+| Domain | richmond-laundromat.vercel.app (custom domain can be added) |
 | Content editor | Decap CMS at /admin |
 | Deployment | Automatic — every save goes live in ~30 seconds |
 
@@ -19,13 +19,13 @@
 ## 🚀 Handover Checklist (Seller → Buyer)
 
 ### 1 — Transfer the GitHub Repository
-1. Go to https://github.com/drewclangan-hub/melbourne-wash-fold
+1. Go to https://github.com/drewclangan-hub/richmond-laundromat
 2. Click **Settings → Danger Zone → Transfer**
 3. Transfer to the buyer's GitHub account
 4. Buyer accepts the transfer via email
 
 ### 2 — Transfer the Vercel Project
-1. Go to https://vercel.com → open the `melbourne-wash-fold` project
+1. Go to https://vercel.com → open the `richmond-laundromat` project
 2. Click **Settings → Transfer Project** and transfer to the buyer's Vercel account
 3. Or: buyer creates a free Vercel account, imports the GitHub repo, and deploys fresh (2 minutes)
 
@@ -63,13 +63,13 @@ Go to **https://your-site-url.vercel.app/admin** and log in with GitHub.
 
 | Field | Example |
 |---|---|
-| Main Phone Number (displayed) | 0402 334 869 |
-| Main Phone Number (link) | tel:0402334869 — no spaces |
-| Secondary Phone Number | 0411 366 741 |
-| Secondary Phone Link | tel:+61411366741 |
+| Main Phone Number (displayed) | (03) 9428 8233 |
+| Main Phone Number (link) | tel:0394288233 — no spaces |
+| Secondary Phone Number | 0455 549 679 |
+| Secondary Phone Link | tel:+61455549679 |
 | Address (short) | 193 Lennox Street, Richmond |
 | Address (full) | 193 Lennox Street, Richmond, VIC 3121 |
-| Payment Info | We accept Mastercard and Visa... |
+| Payment Info | We accept credit cards, debit cards, coins and mobile payment... |
 
 ---
 
@@ -78,7 +78,7 @@ Go to **https://your-site-url.vercel.app/admin** and log in with GitHub.
 
 Click any day to edit it:
 - **Day:** Monday
-- **Hours:** 7:00am – 7:00pm
+- **Hours:** 8:00am – 5:00pm (staff) · Laundromat 7:30am–10:30pm
 
 ---
 
@@ -91,7 +91,7 @@ Click any service to edit:
 |---|---|
 | Service Name | Heading on card and detail page |
 | Short Description | One-line text shown on the service card |
-| Starting Price | e.g. from $60, quoted at pickup — shown on card and pricing page |
+| Starting Price | e.g. from $30 — shown on card and pricing page |
 | Bullet Points | The ticked pills on the service detail page |
 | Pricing Table Rows | Label + value rows in the pricing box |
 
@@ -117,16 +117,14 @@ Click any service to edit:
 | Filename | Used on |
 |---|---|
 | img-home.jpg | Homepage hero image |
+| img-machines.jpg | Self-Service Laundromat |
 | img-wash-dry-fold.jpg | Wash, Dry & Fold |
 | img-dry-cleaning.jpg | Dry Cleaning |
-| img-doona.jpg | Doona & Bedding Cleaning |
 | img-ironing.jpg | Ironing & Pressing |
+| img-doona.jpg | Doona & Bedding Cleaning |
 | img-stain.jpg | Specialty Treatments |
-| img-machines.jpg | Commercial Laundering |
 | img-truck.jpg | Pickup & Delivery |
 | img-quote.jpg | Free Quote Today |
-
-> Note: These are placeholder stock-style photos carried over from the site template. Replace them with real photos of the Richmond store and vans when available.
 
 ---
 
@@ -162,4 +160,4 @@ Once activated (see Step 3 above), enquiries go to your email via Formspree.
 
 ## ⚠️ Content Accuracy Note
 
-This site was built by adapting the Blessington Street Launderette site template with content gathered from the live melbournewashfold.com.au site (Richmond location only — the business also operates a St Kilda location that this site does not cover). Prices shown as "quoted at pickup" or "contact us" reflect the fact that exact per-item pricing wasn't published on the source site at build time — replace with real figures via the CMS once confirmed. The "Why Choose Us" testimonials are generic placeholders (not real customer quotes) and should be swapped for genuine reviews before this goes live publicly.
+This site was built by adapting the Melbourne Wash & Fold site template with content gathered from the live richmondlaundromat.com.au site. Prices shown as "quoted in store" or "contact us" reflect the fact that exact per-item pricing wasn't published on the source site at build time — replace with real figures via the CMS once confirmed.
