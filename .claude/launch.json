@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "melbourne-wash-fold",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": ["serve", "-p", "3000", "C:/Users/drewl/claudeworking/melbourne-wash-fold"],
+      "port": 3000
+    }
+  ]
+}

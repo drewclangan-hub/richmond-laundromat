@@ -1,0 +1,582 @@
+/* ============================================================
+   Melbourne Wash & Fold — app logic (router + content)
+   ============================================================ */
+
+/* ---------------- icon set (simple, stroke-based) ---------------- */
+const ICON = (() => {
+  const w = `stroke="currentColor" fill="none" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"`;
+  return {
+    hanger:`<svg viewBox="0 0 24 24"><path d="M12 4.5a2 2 0 0 0-1 3.7V10L3.5 16a1.6 1.6 0 0 0 1 2.9h15a1.6 1.6 0 0 0 1-2.9L13 10V8.2" ${w}/></svg>`,
+    drum:`<svg viewBox="0 0 24 24"><rect x="4.5" y="3" width="15" height="18" rx="3" ${w}/><path d="M4.5 7.5h15" ${w}/><circle cx="7.5" cy="5.2" r=".7" fill="currentColor" stroke="none"/><circle cx="10" cy="5.2" r=".7" fill="currentColor" stroke="none"/><circle cx="12" cy="14" r="4.4" ${w}/><circle cx="12" cy="14" r="1.5" ${w}/></svg>`,
+    iron:`<svg viewBox="0 0 24 24"><path d="M3.5 15v-2.5A4.5 4.5 0 0 1 8 8h8.5c2 0 4 1.4 4 3.8V15Z" ${w}/><path d="M3.5 18h17" ${w}/><path d="M9 8V6.2c0-.8.6-1.4 1.4-1.4h3" ${w}/></svg>`,
+    bed:`<svg viewBox="0 0 24 24"><path d="M3.5 11V6.5h17V11" ${w}/><path d="M3 19v-7.5h18V19" ${w}/><path d="M3 16h18" ${w}/><path d="M7 11V9h4v2" ${w}/></svg>`,
+    stack:`<svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="4.5" rx="1.4" ${w}/><rect x="4" y="10" width="16" height="4.5" rx="1.4" ${w}/><rect x="4" y="16" width="16" height="4" rx="1.4" ${w}/></svg>`,
+    truck:`<svg viewBox="0 0 24 24"><rect x="2.5" y="6.5" width="12" height="9" rx="1.6" ${w}/><path d="M14.5 9.5H18l3 3v3h-6.5Z" ${w}/><circle cx="7" cy="18" r="1.8" ${w}/><circle cx="17" cy="18" r="1.8" ${w}/></svg>`,
+    drop:`<svg viewBox="0 0 24 24"><path d="M12 3.5c3 4 5.5 7 5.5 10a5.5 5.5 0 0 1-11 0c0-3 2.5-6 5.5-10Z" ${w}/><path d="M9.5 14.5a2.5 2.5 0 0 0 2.5 2.5" ${w}/></svg>`,
+    coin:`<svg viewBox="0 0 24 24"><circle cx="8.5" cy="12" r="5.5" ${w}/><path d="M14 7.2A5.5 5.5 0 0 1 14 16.8" ${w}/><path d="M8.5 9.5v5M7 11h2.2a1.3 1.3 0 0 1 0 2.6H7" ${w}/></svg>`,
+    rug:`<svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="1.5" ${w}/><rect x="3" y="5" width="3.5" height="14" rx="1" ${w}/><rect x="17.5" y="5" width="3.5" height="14" rx="1" ${w}/><line x1="6.5" y1="9" x2="17.5" y2="9" ${w}/><line x1="6.5" y1="12" x2="17.5" y2="12" ${w}/><line x1="6.5" y1="15" x2="17.5" y2="15" ${w}/></svg>`,
+    needle:`<svg viewBox="0 0 24 24"><path d="M20.5 4L13 11.5" ${w}/><path d="M13 11.5L9 20l3-1.5 2.5-5.5" ${w}/><circle cx="9" cy="20" r="1" fill="currentColor" stroke="none"/><path d="M4 14.5c2-2 4.5-2.5 6-1" ${w}/></svg>`,
+    arrow:`<svg viewBox="0 0 24 24"><path d="M5 12h13M13 6l6 6-6 6" ${w}/></svg>`,
+    back:`<svg viewBox="0 0 24 24"><path d="M19 12H6M11 6l-6 6 6 6" ${w}/></svg>`,
+    pin:`<svg viewBox="0 0 24 24"><path d="M12 21c4-4.5 6.5-7.6 6.5-11A6.5 6.5 0 0 0 5.5 10c0 3.4 2.5 6.5 6.5 11Z" ${w}/><circle cx="12" cy="10" r="2.3" ${w}/></svg>`,
+    phone:`<svg viewBox="0 0 24 24"><path d="M6 3.5h3l1.5 4-2 1.5a11 11 0 0 0 5 5l1.5-2 4 1.5v3a2 2 0 0 1-2 2A15 15 0 0 1 4 5.5a2 2 0 0 1 2-2Z" ${w}/></svg>`,
+    mail:`<svg viewBox="0 0 24 24"><rect x="3.5" y="5.5" width="17" height="13" rx="2.2" ${w}/><path d="M4.5 7.5 12 13l7.5-5.5" ${w}/></svg>`,
+    clock:`<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5" ${w}/><path d="M12 7.5V12l3 2" ${w}/></svg>`,
+    check:`<svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7" ${w}/></svg>`,
+    camera:`<svg viewBox="0 0 24 24"><rect x="3" y="6.5" width="18" height="13" rx="2.5" ${w}/><circle cx="12" cy="13" r="3.4" ${w}/><path d="M8 6.5l1.4-2h5.2L16 6.5" ${w}/></svg>`,
+    spark:`<svg viewBox="0 0 24 24"><path d="M12 3v4M12 17v4M3 12h4M17 12h4M6 6l2.5 2.5M15.5 15.5 18 18M18 6l-2.5 2.5M8.5 15.5 6 18" ${w}/></svg>`,
+    menu:`<svg viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16" ${w}/></svg>`,
+    grid:`<svg viewBox="0 0 24 24"><rect x="4" y="4" width="7" height="7" rx="1.6" ${w}/><rect x="13" y="4" width="7" height="7" rx="1.6" ${w}/><rect x="4" y="13" width="7" height="7" rx="1.6" ${w}/><rect x="13" y="13" width="7" height="7" rx="1.6" ${w}/></svg>`,
+    tag:`<svg viewBox="0 0 24 24"><path d="M4 12.5V5.5A1.5 1.5 0 0 1 5.5 4h7l7.5 7.5a1.6 1.6 0 0 1 0 2.2l-5.3 5.3a1.6 1.6 0 0 1-2.2 0Z" ${w}/><circle cx="8.5" cy="8.5" r="1.2" ${w}/></svg>`,
+    star:`<svg viewBox="0 0 24 24"><path d="M12 4l2.3 4.8 5.2.7-3.8 3.7.9 5.2L12 16.6 7.4 18.4l.9-5.2L4.5 9.5l5.2-.7Z" ${w}/></svg>`,
+    scissors:`<svg viewBox="0 0 24 24"><circle cx="6" cy="6" r="2.5" ${w}/><circle cx="6" cy="18" r="2.5" ${w}/><path d="M8.3 7.7L20 20M8.3 16.3L20 4" ${w}/></svg>`,
+    fork:`<svg viewBox="0 0 24 24"><path d="M8 3v5a3 3 0 0 0 6 0V3M11 8v13M17 3v18M14.5 7a2.5 2.5 0 0 0 2.5-2.5" ${w}/></svg>`,
+    building:`<svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="1.5" ${w}/><path d="M9 21V10h6v11" ${w}/><path d="M9 13h6M9 16h6" ${w}/><rect x="10.5" y="3" width="3" height="4" rx=".5" ${w}/></svg>`,
+    heart:`<svg viewBox="0 0 24 24"><path d="M12 21C12 21 4 14.5 4 8.5a4.5 4.5 0 0 1 8-2.8A4.5 4.5 0 0 1 20 8.5C20 14.5 12 21 12 21Z" ${w}/></svg>`,
+    shirt:`<svg viewBox="0 0 24 24"><path d="M3 6l3-3 3 3v3l-2 1v8h10v-8l-2-1V6l3-3 3 3-3 3v9a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V9Z" ${w}/></svg>`,
+    towel:`<svg viewBox="0 0 24 24"><rect x="5" y="3" width="14" height="18" rx="2" ${w}/><path d="M5 8h14" ${w}/><path d="M5 13h14" ${w}/></svg>`,
+    child:`<svg viewBox="0 0 24 24"><circle cx="12" cy="5.5" r="2.5" ${w}/><path d="M8 21v-7a4 4 0 0 1 8 0v7" ${w}/><path d="M5 12l3-2M19 12l-3-2" ${w}/></svg>`,
+  };
+})();
+const ic = (n) => ICON[n] || ICON.hanger;
+
+/* ---------------- coathanger brand mark SVG (inline, for sidebar) ---------------- */
+const BRAND_MARK_SVG = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" width="24" height="24">
+  <path d="M12 4a1.8 1.8 0 0 1 1.8 1.8v1.6"/>
+  <path d="M13.8 7.4C13.8 7.4 20 11.5 20 15.5A1.5 1.5 0 0 1 18.5 17H5.5A1.5 1.5 0 0 1 4 15.5C4 11.5 10.2 7.4 10.2 7.4"/>
+  <path d="M10.2 7.4A1.8 1.8 0 0 1 12 6.2A1.8 1.8 0 0 1 13.8 7.4"/>
+</svg>`;
+
+/* ---------------- content loaded from assets/content.js (generated by scripts/build-content.js) ---------------- */
+const svcById = (id) => SERVICES.find(s => s.id === id) || SERVICES[0];
+
+/* ---------------- tweak state ---------------- */
+const TWEAKS = {
+  look:'crisp',
+  headline:'Melbourne Wash & Fold',
+  hero:'compact',
+  columns:3,
+  cards:'photo',
+  showPrices:true,
+  showBanner:true,
+};
+window.applyTweaks = function (t) {
+  if (t.look != null)       TWEAKS.look = String(t.look).toLowerCase();
+  if (t.headline != null)   TWEAKS.headline = t.headline;
+  if (t.hero != null)       TWEAKS.hero = String(t.hero).toLowerCase();
+  if (t.columns != null)    TWEAKS.columns = parseInt(t.columns) || 3;
+  if (t.cards != null)      TWEAKS.cards = String(t.cards).toLowerCase();
+  if (t.showPrices != null) TWEAKS.showPrices = !!t.showPrices;
+  if (t.showBanner != null) TWEAKS.showBanner = !!t.showBanner;
+  setLook(TWEAKS.look);
+  document.documentElement.style.setProperty('--cols', TWEAKS.columns);
+  route();
+};
+
+/* ---------------- photo helper — real images ---------------- */
+function photo(src, alt, cls='', pos='center') {
+  return `<div class="photo ${cls}" style="position:relative; overflow:hidden;">
+    <img src="${src}" alt="${alt}" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:${pos};z-index:0;">
+    <span class="photo__tag" style="position:relative;z-index:2;">${ic('camera')} ${alt}</span>
+  </div>`;
+}
+
+/* ---------------- HOME ---------------- */
+function heroStandard(T) {
+  return `
+  <div class="hero">
+    <div>
+      <span class="eyebrow">193 Lennox Street, Richmond</span>
+      <h1>${T.headline}</h1>
+      <p class="lede">Melbourne's best service, with free pickup &amp; delivery. Hours: Mon–Fri 7am – 7pm, Sat 9am – 12pm.</p>
+      <div class="cta-row">
+        <a class="btn btn--primary" href="${BIZ.phoneHref}">${ic('phone')} ${BIZ.phone}</a>
+        <a class="btn btn--ghost" data-go="pricing">See Pricing</a>
+      </div>
+      <div class="trust"><span class="stars">★★★★★</span> Free Pickup &amp; Delivery Across Inner Melbourne</div>
+    </div>
+    ${photo('images/img-home.jpg', 'Melbourne Wash & Fold', 'hero__photo')}
+  </div>`;
+}
+function heroCompact(T) {
+  return `
+  <div class="hero hero--compact">
+    <span class="eyebrow">193 Lennox Street, Richmond</span>
+    <h1>${T.headline}</h1>
+    <p class="hero-tagline">Melbourne's best service, with free pickup &amp; delivery</p>
+    <p class="lede">Order online &nbsp;·&nbsp; We collect, clean &amp; deliver &nbsp;·&nbsp; Mon–Fri 7am – 7pm, Sat 9am – 12pm</p>
+  </div>`;
+}
+function bannerBlock() {
+  return `
+  <div class="banner">
+    <div>
+      <span class="pill" style="background:rgba(255,255,255,.16); color:#fff; border-color:rgba(255,255,255,.3);">${ic('truck')} Pickup &amp; Delivery</span>
+      <h3 style="margin-top:12px;">Free pickup and delivery on every order, $35 minimum.</h3>
+      <p>Order online, leave your laundry out, and we'll collect it, clean it, and deliver it back fresh — next day in most cases.</p>
+    </div>
+    <a class="btn btn--ghost" data-link="pickup-delivery">Book A Pickup ${ic('arrow')}</a>
+  </div>`;
+}
+function svcCard(s) {
+  const nav = s.link ? `data-go="${s.link}"` : `data-link="${s.id}"`;
+  const tint = s.tint ? `style="background:${s.tint}; mix-blend-mode:multiply;"` : '';
+  return `<article class="svc svc--tile${s.tint ? ' svc--tinted' : ''}" ${nav}>
+    <img src="${s.img}" alt="${s.name}" class="svc__tile-img" style="object-position:${s.imgPos||'center'}">
+    ${s.tint ? `<div class="svc__tile-tint" ${tint}></div>` : ''}
+    <div class="svc__tile-overlay">
+      <h3 class="svc__tile-name">${s.name}</h3>
+      <span class="svc__tile-cta">${ic('arrow')}</span>
+    </div>
+  </article>`;
+}
+function renderHome() {
+  const T = TWEAKS;
+  const cols = T.columns || 3;
+  const hero = T.hero === 'hidden' ? '' : (T.hero === 'standard' ? heroStandard(T) : heroCompact(T));
+
+  const rem = SERVICES.length % cols;
+  const mainServices = rem ? SERVICES.slice(0, -rem) : SERVICES;
+  const lastServices = rem ? SERVICES.slice(-rem) : [];
+
+  const itemWidth = `calc((100% - ${cols - 1} * 18px) / ${cols})`;
+  const lastRow = lastServices.length ? `
+    <div class="svc-last-row" style="--item-w:${itemWidth}">
+      ${lastServices.map(svcCard).join('')}
+    </div>` : '';
+
+  return `
+  ${hero}
+  <div class="sec-head">
+    <div><h2>Services</h2></div>
+  </div>
+  <div class="svc-grid">
+    ${mainServices.map(svcCard).join('')}
+    ${lastRow}
+  </div>
+  ${T.showBanner ? bannerBlock() : ''}
+  ${footer()}`;
+}
+
+/* ---------------- SERVICE DETAIL ---------------- */
+function renderService(id) {
+  const s = svcById(id);
+  const others = SERVICES.filter(x => x.id !== s.id).slice(0, 3);
+  return `
+  <div class="crumb"><a data-go="home">Home</a> ${ic('arrow')} <a data-go="pricing">Services</a> ${ic('arrow')} <span>${s.name}</span></div>
+  <div class="detail-head">
+    <div class="di">${ic(s.icon)}</div>
+    <div><h1 style="margin-top:8px;">${s.name}</h1></div>
+  </div>
+  <div class="detail-grid">
+    <div class="detail-desc">
+      ${photo(s.img, s.name, 'detail-hero', s.imgPos||'center')}
+      ${s.desc ? `<p>${s.desc}</p>` : ''}
+      <div class="${s.chipsGrid ? 'chips chips--grid' : 'chips'}">${s.chips.map(c => `<span class="chip${s.chipsGrid ? ' chip--grid' : ''}">${ic('check')} ${c}</span>`).join('')}</div>
+      ${s.extra ? `<p style="margin-top:22px; font-size:15px; color:var(--muted); line-height:1.55;">${s.extra}</p>` : ''}
+    </div>
+    <aside class="pricebox">
+      <h4>Pricing Guide</h4>
+      <div class="from"><b>${s.from}</b></div>
+      ${s.rows.map(r => `<div class="prow"><span>${r[0]}</span><b>${r[1]}</b></div>`).join('')}
+      <a class="btn btn--primary btn--block" data-go="contact">Contact Us</a>
+      <a class="btn btn--ghost btn--block" style="margin-top:9px;" href="${BIZ.phoneHref}">${ic('phone')} ${BIZ.phone}</a>
+      <div class="note">${ic('truck')} Free pickup and delivery on every order, $35 minimum.</div>
+    </aside>
+  </div>
+  <div class="more">
+    <div class="sec-head" style="margin:0 0 14px;"><h2 style="font-size:22px;">Services</h2></div>
+    <div class="carousel-wrap">
+      <button class="carousel-btn carousel-btn--prev" onclick="blCarousel('svc-carousel-${id}',-1)">${ic('back')}</button>
+      <div class="carousel" id="svc-carousel-${id}">
+        ${SERVICES.filter(s => s.id !== id).map(s => `
+        <div class="carousel-item" data-link="${s.id}">
+          <img src="${s.img}" alt="${s.name}">
+          <div class="carousel-item__body">
+            <div class="carousel-item__name">${s.name}</div>
+            <div class="carousel-item__price">${s.from}</div>
+          </div>
+        </div>`).join('')}
+      </div>
+      <button class="carousel-btn carousel-btn--next" onclick="blCarousel('svc-carousel-${id}',1)">${ic('arrow')}</button>
+    </div>
+  </div>
+  ${footer()}`;
+}
+
+/* ---------------- COMMERCIAL ---------------- */
+function renderCommercial() {
+  const whatWeClean = [
+    { name:'Towels & gym linen', icon:'towel' },
+    { name:'Bed sheets & pillowcases', icon:'bed' },
+    { name:'Staff uniforms', icon:'shirt' },
+    { name:'Table & kitchen linen', icon:'spark' },
+    { name:'Robes & salon linen', icon:'hanger' },
+    { name:'Cleaning cloths', icon:'check' },
+    { name:'Doonas & bedding', icon:'bed' },
+    { name:'Business shirts', icon:'shirt' },
+  ];
+  const whoAndIndustries = [
+    { name:'Restaurants & Cafés', icon:'fork' },
+    { name:'Gyms & Fitness Studios', icon:'coin' },
+    { name:'Hair & Beauty Salons', icon:'scissors' },
+    { name:'Hotels & Short-Stay Accommodation', icon:'building' },
+    { name:'Cleaning Companies', icon:'spark' },
+    { name:'Childcare & Schools', icon:'child' },
+    { name:'Events & Functions', icon:'camera' },
+    { name:'Offices & Co-Working Spaces', icon:'building' },
+  ];
+  const steps = [
+    ['Schedule a Pickup', 'Organise regular collection times.'],
+    ['Professional Cleaning & Sanitisation', 'Expertly washed, sanitised, dried, folded.'],
+    ['Next-Day Delivery', 'Clean, fresh linen returned promptly.'],
+  ];
+
+  return `
+  <div class="head-block">
+    <h1>Commercial Laundry</h1>
+  </div>
+
+  <div class="sec-head"><div><h2>How It Works</h2></div></div>
+  <div class="steps" style="margin-bottom:36px;">
+    ${steps.map((st, i) => `
+      <div class="step"><div class="num">${i + 1}</div><h3>${st[0]}</h3><p>${st[1]}</p></div>
+      ${i < steps.length - 1 ? `<div class="step-arrow">${ic('arrow')}</div>` : ''}
+    `).join('')}
+  </div>
+
+  <div class="sec-head"><div><h2>Who We Service</h2></div></div>
+  <div class="carousel-wrap" style="margin-bottom:32px;">
+    <button class="carousel-btn carousel-btn--prev" onclick="blCarousel('who-carousel',-1)">${ic('back')}</button>
+    <div class="carousel" id="who-carousel">
+      ${whoAndIndustries.map(ind => `<div class="tile">
+        <div class="tile__icon">${ic(ind.icon)}</div>
+        <span class="tile__name">${ind.name}</span>
+      </div>`).join('')}
+    </div>
+    <button class="carousel-btn carousel-btn--next" onclick="blCarousel('who-carousel',1)">${ic('arrow')}</button>
+  </div>
+
+  <div class="sec-head"><div><h2>What We Clean</h2></div></div>
+  <div class="carousel-wrap" style="margin-bottom:32px;">
+    <button class="carousel-btn carousel-btn--prev" onclick="blCarousel('clean-carousel',-1)">${ic('back')}</button>
+    <div class="carousel" id="clean-carousel">
+      ${whatWeClean.map(s => `<div class="tile">
+        <div class="tile__icon">${ic(s.icon)}</div>
+        <span class="tile__name">${s.name}</span>
+      </div>`).join('')}
+    </div>
+    <button class="carousel-btn carousel-btn--next" onclick="blCarousel('clean-carousel',1)">${ic('arrow')}</button>
+  </div>
+
+  <div class="banner" style="margin-top:28px;">
+    <div>
+      <h3>Book A Pickup Today</h3>
+      <p>Professional laundry for businesses across Melbourne. Free pickup and delivery available.</p>
+    </div>
+    <a class="btn btn--ghost" href="${BIZ.phoneHref}">${ic('phone')} ${BIZ.phone}</a>
+  </div>
+
+  ${footer()}`;
+}
+
+/* ---------------- WHY CHOOSE US ---------------- */
+function renderWhyChooseUs() {
+  const whyUs = [
+    { head:'Free Pickup & Delivery', body:'Flexible scheduling — order online and we\'ll collect and return your laundry, no trip required.' },
+    { head:'Individualised Service', body:'Your laundry is never mixed with other customers\' items — washed and returned as your own.' },
+    { head:'Next-Day Turnaround', body:'Most orders are back with you the very next day, with a 3-hour express option available.' },
+    { head:'Professional Care', body:'The right treatment for every fabric, helping your garments and linens last longer.' },
+    { head:'Transparent Pricing', body:'Know the cost upfront — no surprises when your order is delivered back to you.' },
+    { head:'No Contracts', body:'No lock-ins or long-term commitments — use us as often or as little as you need.' },
+    { head:'Easy Payment', body:'Mastercard and Visa accepted, with account billing available for commercial customers.' },
+    { head:'Referral Rewards', body:'Refer a friend and you both receive a $20 credit toward your next order.' },
+  ];
+  const testimonials = [
+    { name:'Richmond Customer', role:'Regular Customer', quote:'Reliable pickup and delivery every week — makes laundry day completely effortless.' },
+    { name:'Inner Melbourne Customer', role:'Regular Customer', quote:'Everything always comes back neatly folded and on time. Easy to book online too.' },
+    { name:'Local Business Owner', role:'Commercial Customer', quote:'They handle our linen on a set schedule so we never have to think about it.' },
+  ];
+
+  return `
+  <div class="head-block">
+    <span class="eyebrow">${ic('star')} Why Choose Us</span>
+    <h1>Why Choose Melbourne Wash &amp; Fold</h1>
+  </div>
+
+  <div class="why-grid" style="margin-bottom:36px;">
+    ${whyUs.map(w => `<div class="why-card card">
+      <div class="why-card__head">
+        <span class="why-card__icon">${ic('check')}</span>
+        <h3 class="why-card__title">${w.head}</h3>
+        <span class="why-card__toggle">${ic('arrow').replace('viewBox="0 0 24 24"','viewBox="0 0 24 24" style="transform:rotate(90deg)"')}</span>
+      </div>
+      <p class="why-card__body">${w.body}</p>
+    </div>`).join('')}
+  </div>
+
+  <div class="sec-head"><div><h2>What Our Customers Say</h2></div></div>
+  <div class="testimonial-scroll">
+    ${testimonials.map(t => `<div class="testimonial-card card">
+      <p>"${t.quote}"</p>
+      <div class="testimonial-card__name">${t.name}</div>
+      <div class="testimonial-card__role">${t.role}</div>
+    </div>`).join('')}
+  </div>
+
+  ${footer()}`;
+}
+
+/* ---------------- PRICING ---------------- */
+function renderPricing() {
+  return `
+  <div class="head-block">
+    <h1>Pricing</h1>
+    <p style="font-size:14px; color:var(--ink-soft); margin-top:10px;">We accept Visa, Mastercard, Apple Pay, Google Pay, and cash.</p>
+  </div>
+  ${(() => {
+    const pricingServices = SERVICES.filter(s => s.id !== 'pickup-delivery');
+    const cols = 3;
+    const rem = pricingServices.length % cols;
+    const main = rem ? pricingServices.slice(0, -rem) : pricingServices;
+    const last = rem ? pricingServices.slice(-rem) : [];
+    const cardHtml = s => `
+    <div class="price-card">
+      <div class="price-card__head">
+        <div class="price-card__ico">${ic(s.icon)}</div>
+        <div>
+          <div class="price-card__name">${s.name}</div>
+          <div class="price-card__from">${s.from}</div>
+        </div>
+        <span class="price-card__toggle"><span class="price-card__toggle-label">See prices</span>${ic('arrow').replace('viewBox="0 0 24 24"','viewBox="0 0 24 24" style="transform:rotate(90deg)"')}</span>
+      </div>
+      <div class="price-card__rows">
+        ${s.rows.map(r => `<div class="price-card__row"><span>${r[0]}</span><b>${r[1]}</b></div>`).join('')}
+      </div>
+    </div>`;
+    const itemWidth = `calc((100% - ${cols - 1} * 18px) / ${cols})`;
+    const lastRow = last.length ? `
+    <div class="price-last-row" style="--item-w:${itemWidth}">
+      ${last.map(cardHtml).join('')}
+    </div>` : '';
+    return `<div class="price-grid">${main.map(cardHtml).join('')}${lastRow}</div>`;
+  })()}
+  ${footer()}`;
+}
+
+/* ---------------- COLLECTION & DELIVERY ---------------- */
+function renderDelivery() {
+  const areas = ['Richmond','Carlton','Fitzroy','Collingwood','Hawthorn','Malvern','Toorak','Caulfield','St Kilda','Brighton','South Melbourne','Melbourne CBD'];
+  return `
+  <div class="head-block"><span class="eyebrow">${ic('truck')} Collection &amp; Delivery</span>
+    <h1>Collection &amp; Delivery</h1>
+  </div>
+  <div class="split2">
+    <div class="info-card">
+      <h3>Pricing</h3>
+      <div class="info-row"><div class="ii">${ic('truck')}</div><div><b>Minimum Order</b><span>$35</span></div></div>
+      <div class="info-row"><div class="ii">${ic('check')}</div><div><b>Free Pickup and Delivery</b><span>On every order, no threshold.</span></div></div>
+      <div class="info-row"><div class="ii">${ic('clock')}</div><div><b>Turnaround</b><span>Next day in most cases, 3-hour express available.</span></div></div>
+    </div>
+    <div class="info-card">
+      <h3>Service Areas</h3>
+      <p style="font-size:13px; color:var(--muted); margin-bottom:14px;">Melbourne Wash &amp; Fold proudly serves inner Melbourne, including:</p>
+      <div class="chips" style="flex-wrap:wrap;">
+        ${areas.map(a => `<span class="chip">${a}</span>`).join('')}
+      </div>
+    </div>
+  </div>
+  <div class="banner" style="margin-top:28px;">
+    <div>
+      <h3>Book A Pickup Today</h3>
+      <p>Too busy to come in? We'll collect your laundry, clean it, and deliver it back fresh.</p>
+    </div>
+    <a class="btn btn--ghost" href="${BIZ.phoneHref}">${ic('phone')} ${BIZ.phone}</a>
+  </div>
+  ${footer()}`;
+}
+
+/* ---------------- HOURS ---------------- */
+function renderHours() {
+  const today = new Date().getDay();
+  const order = [1,2,3,4,5,6,0];
+  return `
+  <div class="head-block"><span class="eyebrow">${ic('clock')} Opening Hours</span>
+    <h1>Opening Hours</h1>
+  </div>
+  <div class="info-card hours-table">
+    ${order.map(d => {
+      const h = HOURS[d === 0 ? 6 : d - 1];
+      return `<div class="hours-row ${d === today ? 'today' : ''}"><span class="day">${h[0]}</span><span class="time">${h[1]}</span></div>`;
+    }).join('')}
+  </div>
+  ${footer()}`;
+}
+
+/* ---------------- CONTACT INFO ---------------- */
+function renderContactInfo() {
+  return `
+  <div class="head-block">
+    <h1>Contact Us</h1>
+  </div>
+  <div class="info-card" style="max-width:480px; margin:0 auto;">
+    <div class="info-row"><div class="ii">${ic('phone')}</div><div><b>Phone</b><span><a href="${BIZ.phoneHref}" style="color:var(--accent);">${BIZ.phone}</a></span></div></div>
+    <div class="info-row"><div class="ii">${ic('phone')}</div><div><b>Phone</b><span><a href="${BIZ.phone2Href}" style="color:var(--accent);">${BIZ.phone2}</a></span></div></div>
+    <div class="info-row"><div class="ii">${ic('pin')}</div><div><b>Address</b><span>${BIZ.addrFull}</span></div></div>
+  </div>
+  ${footer()}`;
+}
+
+/* ---------------- FIND US ---------------- */
+function renderFind() {
+  return `
+  <div class="head-block">
+    <h1>193 Lennox Street, Richmond</h1>
+  </div>
+  <div style="border:1px solid var(--line); border-radius:var(--r); overflow:hidden; box-shadow:var(--shadow-sm);">
+    <iframe
+      src="https://maps.google.com/maps?q=193+Lennox+Street,+Richmond+VIC+3121&z=16&output=embed"
+      width="100%" height="460" style="border:0; display:block;"
+      allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade"
+      title="Melbourne Wash & Fold on Google Maps">
+    </iframe>
+  </div>
+  <div style="margin-top:16px;">
+    <a class="btn btn--primary" href="https://www.google.com/maps/dir/?api=1&destination=Melbourne+Wash+%26+Fold,193+Lennox+St,Richmond+VIC+3121" target="_blank" rel="noopener">${ic('pin')} Get Directions</a>
+  </div>
+  ${footer()}`;
+}
+
+/* ---------------- CONTACT ---------------- */
+function renderContact() {
+  return `
+  <div class="head-block">
+    <h1>Get In Touch</h1>
+  </div>
+  <div style="max-width:560px; margin:0 auto;">
+    <form class="form" id="contactForm" action="https://formspree.io/f/REPLACE_WITH_YOUR_FORM_ID" method="POST">
+      <div class="field--row">
+        <div class="field"><label>Name</label><input type="text" placeholder="Your name" required></div>
+        <div class="field"><label>Phone</label><input type="tel" placeholder="Optional"></div>
+      </div>
+      <div class="field"><label>Email</label><input type="email" placeholder="you@email.com" required></div>
+      <div class="field"><label>Service</label>
+        <select>
+          <option value="">What can we help with?</option>
+          ${SERVICES.map(s => `<option>${s.name}</option>`).join('')}
+          <option>Something else</option>
+        </select>
+      </div>
+      <div class="field"><label>Message</label><textarea></textarea></div>
+      <button class="btn btn--primary" id="sendBtn" type="submit">Send Message ${ic('arrow')}</button>
+      <div class="form-ok" id="formOk">${ic('check')} Thanks — we'll be in touch soon.</div>
+    </form>
+  </div>
+  ${footer()}`;
+}
+
+/* ---------------- FOOTER ---------------- */
+function footer() {
+  return `<div class="foot">
+    <span>© 2026 Melbourne Wash & Fold · ${BIZ.addr} · ${BIZ.phone}</span>
+    <span class="foot-links">
+      <a data-go="pricing">Pricing</a>
+      <a data-go="delivery">Collection</a>
+      <a data-go="hours">Hours</a>
+      <a data-go="contact">Contact</a>
+    </span>
+  </div>`;
+}
+
+/* ---------------- ROUTER ---------------- */
+const ROUTES = {
+  home: renderHome, pricing: renderPricing, delivery: renderDelivery,
+  commercial: renderCommercial, whychooseus: renderWhyChooseUs,
+  hours: renderHours, find: renderFind, contact: renderContact,
+  contactinfo: renderContactInfo,
+};
+
+function route() {
+  const hash = location.hash.replace(/^#\/?/, '') || 'home';
+  const [key, arg] = hash.split('/');
+  const view = document.getElementById('view');
+  let html, navKey = key;
+
+  if (key === 'service') { html = renderService(arg); navKey = 'pricing'; }
+  else if (ROUTES[key]) { html = ROUTES[key](); }
+  else { html = renderHome(); navKey = 'home'; }
+
+  view.innerHTML = `<div class="main-view">${html}</div>`;
+  document.querySelectorAll('.nav a').forEach(a => a.classList.toggle('active', a.dataset.nav === navKey));
+  document.body.classList.remove('nav-open');
+  window.scrollTo(0, 0);
+  document.querySelector('.main').scrollTo?.(0, 0);
+}
+
+/* delegated navigation */
+document.addEventListener('click', (e) => {
+  const anchor = e.target.closest('a[href]');
+  if (anchor && (anchor.href.startsWith('http') || anchor.href.startsWith('tel') || anchor.href.startsWith('mailto'))) return;
+  const link = e.target.closest('[data-link]');
+  const go = e.target.closest('[data-go]');
+  if (link) { location.hash = '#/service/' + link.dataset.link; return; }
+  if (go) {
+    const t = go.dataset.go;
+    location.hash = t === 'home' ? '#/home' : '#/' + t;
+    return;
+  }
+  const priceCard = e.target.closest('.price-card');
+  if (priceCard && window.innerWidth < 860) { priceCard.classList.toggle('price-card--open'); return; }
+  const whyCard = e.target.closest('.why-card');
+  if (whyCard && window.innerWidth < 860) { whyCard.classList.toggle('why-card--open'); return; }
+  if (e.target.closest('#sendBtn')) {
+    const form = document.getElementById('contactForm');
+    if (!form) return;
+    if (form.action.includes('REPLACE_WITH_YOUR_FORM_ID')) {
+      // Formspree not yet configured — show demo success
+      const ok = document.getElementById('formOk');
+      if (ok) { ok.classList.add('show'); document.getElementById('sendBtn').style.display = 'none'; }
+      return;
+    }
+    // Let the form submit naturally to Formspree
+  }
+  if (e.target.closest('.menu-btn')) { document.body.classList.toggle('nav-open'); return; }
+  if (e.target.closest('.nav__close')) { document.body.classList.remove('nav-open'); return; }
+  if (e.target.closest('.nav-overlay')) { document.body.classList.remove('nav-open'); return; }
+  if (e.target.closest('.brand') && !document.body.classList.contains('nav-open')) location.hash = '#/home';
+});
+window.addEventListener('hashchange', route);
+
+/* ---------------- LOOK SWITCHER ---------------- */
+function setLook(name) {
+  document.body.classList.remove('theme-crisp', 'theme-friendly', 'theme-editorial');
+  document.body.classList.add('theme-' + name);
+  localStorage.setItem('bl_look', name);
+}
+document.addEventListener('click', (e) => {
+  const b = e.target.closest('.looks button');
+  if (b) setLook(b.dataset.look);
+});
+
+/* ---------------- carousel helper (infinite loop) ---------------- */
+window.blCarousel = function(id, dir) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  const items = el.querySelectorAll('.carousel-item, .tile, .testimonial-card');
+  if (!items.length) return;
+  const total = items.length;
+  const currentIdx = parseInt(el.dataset.idx || '0');
+  const nextIdx = (currentIdx + dir + total) % total;
+  const wrapping = (currentIdx === 0 && dir === -1) || (currentIdx === total - 1 && dir === 1);
+  const gap = parseInt(getComputedStyle(el).gap) || 16;
+  const itemW = items[0].offsetWidth + gap;
+  // Jump instantly on wrap-around so it doesn't scroll the wrong way
+  el.scrollTo({ left: nextIdx * itemW, behavior: wrapping ? 'instant' : 'smooth' });
+  el.dataset.idx = nextIdx;
+};
+
+/* ---------------- boot ---------------- */
+document.documentElement.style.setProperty('--cols', TWEAKS.columns);
+setLook(TWEAKS.look);
+if (!location.hash) location.hash = '#/home';
+route();

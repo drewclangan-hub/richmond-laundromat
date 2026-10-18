@@ -1,0 +1,9 @@
+{
+  "buildCommand": "node scripts/build-content.js",
+  "outputDirectory": ".",
+  "framework": null,
+  "rewrites": [
+    { "source": "/api/auth", "destination": "/api/auth.js" },
+    { "source": "/api/callback", "destination": "/api/callback.js" }
+  ]
+}
